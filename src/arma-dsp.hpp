@@ -4,7 +4,7 @@
 
 arma::vec filter(arma::vec signal, arma::vec ff_coeffs, arma::vec fb_coeffs);
 
-arma::vec one_pole_filter(arma::vec signal, double ff_coeff);
+arma::vec one_zero_filter(arma::vec signal, double ff_coeff);
 
 arma::vec one_pole_filter(arma::vec signal, double fb_coeff);
 
