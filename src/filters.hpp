@@ -6,11 +6,9 @@
 #include "windows.hpp"
 #include "filters.hpp"
 
-arma::vec filter(const arma::vec &signal, const arma::vec &ff_coeffs, const arma::vec &fb_coeffs);
-
 arma::vec fir_filter(const arma::vec &signal, const arma::vec &ff_coeffs);
 
-arma::vec iir_filter(const arma::vec &signal, const arma::vec &fb_coeffs);
+arma::vec iir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, const arma::vec &fb_coeffs);
 
 arma::vec one_zero_filter(const arma::vec &signal, double ff_coeff);
 
