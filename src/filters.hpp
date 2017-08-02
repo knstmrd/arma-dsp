@@ -6,16 +6,16 @@
 #include "windows.hpp"
 #include "filters.hpp"
 
-arma::vec filter(arma::vec signal, arma::vec ff_coeffs, arma::vec fb_coeffs);
+arma::vec filter(const arma::vec &signal, const arma::vec &ff_coeffs, const arma::vec &fb_coeffs);
 
-arma::vec fir_filter(arma::vec signal, arma::vec ff_coeffs);
+arma::vec fir_filter(const arma::vec &signal, const arma::vec &ff_coeffs);
 
-arma::vec iir_filter(arma::vec signal, arma::vec fb_coeffs);
+arma::vec iir_filter(const arma::vec &signal, const arma::vec &fb_coeffs);
 
-arma::vec one_zero_filter(arma::vec signal, double ff_coeff);
+arma::vec one_zero_filter(const arma::vec &signal, double ff_coeff);
 
-arma::vec one_pole_filter(arma::vec signal, double fb_coeff);
+arma::vec one_pole_filter(const arma::vec &signal, double fb_coeff);
 
-arma::vec two_pole_resonator(arma::vec signal, double frequency, double damping);
+arma::vec two_pole_resonator(const arma::vec &signal, double frequency, double damping);
 
 #endif

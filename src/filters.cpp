@@ -1,6 +1,6 @@
 #include "filters.hpp"
 
-arma::vec fir_filter(arma::vec signal, arma::vec ff_coeffs) {
+arma::vec fir_filter(const arma::vec &signal, const arma::vec &ff_coeffs) {
     arma::vec output(signal.n_elem);
 
     int i;
