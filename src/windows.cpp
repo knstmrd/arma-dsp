@@ -15,6 +15,29 @@ arma::vec window_gaussian(int framelength, double sigma) {
     // TODO: add framelength checks
 }
 
+arma::vec window_triangle(int framelength) {
+    if (framelength == 1) {
+        return arma::ones(1);
+    }
+    else {
+        arma::vec result = arma::vec(framelength);
+        int half_length = (int)((framelength + 1) / 2);
+        arma::vec n = arma::regspace<arma::vec>(1, half_length);
+        if ((int)(framelength % 2) == 0) {
+            n = (2.0 * n - 1.0) / framelength;
+            result.subvec(0, half_length-1) = n;
+            result.subvec(half_length, framelength-1) = n.subvec(half_length-1, 0);
+        }
+        else {
+            n = 2.0 * n / (framelength + 1.0);
+            result.subvec(0, half_length-1) = n;
+            result.subvec(half_length, framelength-1) = n.subvec(half_length-2, 0);
+        }
+        return result;
+    }
+    // TODO: add framelength checks
+}
+
 arma::vec window_hann(int framelength) {
     if (framelength == 1) {
         return arma::ones(1);
