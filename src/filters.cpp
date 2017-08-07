@@ -42,3 +42,30 @@ arma::vec iir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, const 
     iir_filter(signal, ff_coeffs, fb_coeffs, output);
     return output;
 }
+
+void one_zero_filter(const arma::vec &signal, double ff_coeff, arma::vec &output) {
+    arma::vec ffc(1) = {ff_coeff};
+
+    fir_filter(signal, ffc, output);
+}
+
+arma::vec one_zero_filter(const arma::vec &signal, double ff_coeff) {
+    arma::vec output(signal.n_elem);
+
+    fir_filter(signal, ff_coeff, output);
+    return output;
+}
+
+void one_pole_filter(const arma::vec &signal, double ff_coeff, double fb_coeff, arma::vec &output) {
+    arma::vec ffc(1) = {ff_coeff};
+    arma::vec fbc(1) = {fb_coeff};
+    
+    iir_filter(signal, ffc, fbc, output);
+}
+
+arma::vec one_pole_filter(const arma::vec &signal, double ff_coeff, double fb_coeff) {
+    arma::vec output(signal.n_elem);
+
+    one_pole_filter(signal, ff_coeff, fb_coeff, output);
+    return output;
+}
