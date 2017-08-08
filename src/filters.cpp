@@ -68,29 +68,35 @@ arma::vec iir_filter(const arma::vec &signal, double input_gain, double ff_coeff
     return output;
 }
 
-void one_zero_filter(const arma::vec &signal, double ff_coeff, arma::vec &output) {
-    arma::vec ffc(1) = {ff_coeff};
-
-    fir_filter(signal, ffc, output);
+void one_zero_filter(const arma::vec &signal, double input_gain, double ff_coeff, arma::vec &output) {
+    fir_filter(signal, input_gain, ff_coeff, 1, output);
 }
 
-arma::vec one_zero_filter(const arma::vec &signal, double ff_coeff) {
+arma::vec one_zero_filter(const arma::vec &signal, double input_gain, double ff_coeff) {
     arma::vec output(signal.n_elem);
 
-    fir_filter(signal, ff_coeff, output);
+    fir_filter(signal, input_gain, ff_coeff, output);
     return output;
 }
 
-void one_pole_filter(const arma::vec &signal, double ff_coeff, double fb_coeff, arma::vec &output) {
-    arma::vec ffc(1) = {ff_coeff};
-    arma::vec fbc(1) = {fb_coeff};
-    
-    iir_filter(signal, ffc, fbc, output);
+void one_pole_filter(const arma::vec &signal, double input_gain, double fb_coeff, arma::vec &output) {
+    iir_filter(signal, input_gain, 0.0, 0, fb_coeff, 1, output);
 }
 
-arma::vec one_pole_filter(const arma::vec &signal, double ff_coeff, double fb_coeff) {
+arma::vec one_pole_filter(const arma::vec &signal, double input_gain, double fb_coeff) {
     arma::vec output(signal.n_elem);
 
-    one_pole_filter(signal, ff_coeff, fb_coeff, output);
+    one_pole_filter(signal, input_gain, fb_coeff, output);
+    return output;
+}
+
+void allpass_filter(const arma::vec &signal, double gain, int delay, arma::vec &output) {
+    iir_filter(signal, -gain, 1., delay, -gain, delay, output);
+}
+
+arma::vec allpass_filter(const arma::vec &signal, double gain, int delay) {
+    arma::vec output(signal.n_elem);
+
+    allpass_filter(signal, gain, delay, output);
     return output;
 }
