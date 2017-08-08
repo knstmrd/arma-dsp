@@ -41,7 +41,7 @@ void iir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, const arma:
     }
 
     for (i=fb_coeffs.n_elem+1; i<=signal.n_elem; i++) {
-        output[i] = arma::dot(signal.subvec(i-1, i - signal.n_elem + 1), fb_coeffs);
+        output[i] -= arma::dot(signal.subvec(i-1, i - signal.n_elem + 1), fb_coeffs);
     }
 }
 
@@ -98,5 +98,17 @@ arma::vec allpass_filter(const arma::vec &signal, double gain, int delay) {
     arma::vec output(signal.n_elem);
 
     allpass_filter(signal, gain, delay, output);
+    return output;
+}
+
+void lowpass_filter(const arma::vec &signal, int sampling_rate, double cutoff_frequency, arma::vec &output) {
+    double alpha = 2.0 * M_PI * cutoff_frequency / (sampling_rate * (2.0 * M_PI * cutoff_frequency / sampling_rate + 1.0));
+    iir_filter(signal, alpha, 0.0, 0, -(1 - alpha), 1, output);
+}
+
+arma::vec lowpass_filter(const arma::vec &signal, int sampling_rate, double cutoff_frequency) {
+    arma::vec output(signal.n_elem);
+
+    allpass_filter(signal, sampling_rate, cutoff_frequency, output);
     return output;
 }

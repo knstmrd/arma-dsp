@@ -46,5 +46,12 @@ void allpass_filter(const arma::vec &signal, double gain, int delay, arma::vec &
 
 arma::vec allpass_filter(const arma::vec &signal, double gain, int delay);
 
+void lowpass_filter(const arma::vec &signal, int sampling_rate, double cutoff_frequency, arma::vec &output);
+// not cutoff, but actually knee frequency
+// y[n] = alpha * x[n] + (1-alpha) * y[n-1]
+// alpha = 2 pi dt * cutoff_frequency / (2 * pi * dt * cutoff_frequency + 1)
+// dt = 1 / sampling_rate
+
+arma::vec lowpass_filter(const arma::vec &signal, int sampling_rate, double cutoff_frequency);
 
 #endif
