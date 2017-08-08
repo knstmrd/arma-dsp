@@ -9,6 +9,7 @@
 void fir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, arma::vec &output);
 
 void fir_filter(const arma::vec &signal, double input_gain, double ff_coeff, int delay, arma::vec &output);
+// y[n] = input_gain * x[n] + ff_coeff * x[n - delay]
 
 arma::vec fir_filter(const arma::vec &signal, const arma::vec &ff_coeffs);
 
@@ -18,6 +19,7 @@ arma::vec fir_filter(const arma::vec &signal, double input_gain, double ff_coeff
 void iir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, const arma::vec &fb_coeffs, arma::vec &output);
 
 void iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, int ff_delay, double fb_coeff, int fb_delay, arma::vec &output);
+// y[n] = input_gain * x[n] + ff_coeff * x[n - ff_delay] - fb_coeff * y[n - fb_delay]
 
 arma::vec iir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, const arma::vec &fb_coeffs);
 
