@@ -1,4 +1,5 @@
 #include "windows.hpp"
+#include "helpers.hpp"
 
 arma::vec window_rectangular(unsigned int framelength) {
     return arma::ones(framelength);
@@ -25,12 +26,12 @@ arma::vec window_triangle(unsigned int framelength) {
         if ((int)(framelength % 2) == 0) {
             n = (2.0 * n - 1.0) / framelength;
             result.subvec(0, half_length-1) = n;
-            result.subvec(half_length, framelength-1) = n.subvec(half_length-1, 0);
+            result.subvec(half_length, framelength-1) = reverse(n.subvec(0, half_length-1));
         }
         else {
             n = 2.0 * n / (framelength + 1.0);
             result.subvec(0, half_length-1) = n;
-            result.subvec(half_length, framelength-1) = n.subvec(half_length-2, 0);
+            result.subvec(half_length, framelength-1) = reverse(n.subvec(0, half_length-2));
         }
         return result;
     }
