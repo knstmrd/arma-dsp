@@ -1,7 +1,7 @@
 #include "filters.hpp"
 
 void fir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, arma::vec &output) {
-    int i;
+    unsigned int i;
     for (i=0; i<ff_coeffs.n_elem; i++) {
         output[i] = arma::dot(signal.subvec(i, 0), ff_coeffs.subvec(0, i)); // TODO: Does reversing indices work?
     }
@@ -11,8 +11,7 @@ void fir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, arma::vec &
     }
 }
 
-void fir_filter(const arma::vec &signal, double input_gain, double ff_coeff, int delay, arma::vec &output) {
-    int i;
+void fir_filter(const arma::vec &signal, double input_gain, double ff_coeff, unsigned int delay, arma::vec &output) {
     output.subvec(0, delay-1) = input_gain * signal.subvec(0, delay-1);
     output.subvec(delay, signal.n_elem-1) = input_gain * signal.subvec(delay, signal.n_elem-1) + ff_coeff * signal.subvec(0, signal.n_elem - delay - 1);
 }
@@ -24,7 +23,7 @@ arma::vec fir_filter(const arma::vec &signal, const arma::vec &ff_coeffs) {
     return output;
 }
 
-arma::vec fir_filter(const arma::vec &signal, double input_gain, double ff_coeff, int delay) {
+arma::vec fir_filter(const arma::vec &signal, double input_gain, double ff_coeff, unsigned int delay) {
     arma::vec output(signal.n_elem);
 
     fir_filter(signal, input_gain, ff_coeff, delay, output);
@@ -34,7 +33,7 @@ arma::vec fir_filter(const arma::vec &signal, double input_gain, double ff_coeff
 void iir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, const arma::vec &fb_coeffs, arma::vec &output) {
     output = fir_filter(signal, ff_coeffs);
 
-    int i;
+    unsigned int i;
 
     for (i=1; i<=fb_coeffs.n_elem; i++) {
         output[i] -= arma::dot(output.subvec(i-1, 0), fb_coeffs.subvec(0, i-1));
@@ -45,10 +44,10 @@ void iir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, const arma:
     }
 }
 
-void iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, int ff_delay, double fb_coeff, int fb_delay, arma::vec &output) {
+void iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, unsigned int ff_delay, double fb_coeff, unsigned int fb_delay, arma::vec &output) {
     fir_filter(signal, input_gain, ff_coeff, ff_delay, output);
 
-    for (i=fb_delay, i<signal.n_elem; i++) {
+    for (unsigned int i=fb_delay; i<signal.n_elem; i++) {
         output[i] -= fb_coeff * output[i - fb_delay];
     }
 }
@@ -61,7 +60,7 @@ arma::vec iir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, const 
     return output;
 }
 
-arma::vec iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, int ff_delay, double fb_coeff, int fb_delay) {
+arma::vec iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, unsigned int ff_delay, double fb_coeff, unsigned int fb_delay) {
     arma::vec output(signal.n_elem);
 
     iir_filter(signal, input_gain, ff_coeff, ff_delay, fb_coeff, fb_delay, output);
@@ -75,7 +74,7 @@ void one_zero_filter(const arma::vec &signal, double input_gain, double ff_coeff
 arma::vec one_zero_filter(const arma::vec &signal, double input_gain, double ff_coeff) {
     arma::vec output(signal.n_elem);
 
-    fir_filter(signal, input_gain, ff_coeff, output);
+    fir_filter(signal, input_gain, ff_coeff, 1, output);
     return output;
 }
 
@@ -90,23 +89,23 @@ arma::vec one_pole_filter(const arma::vec &signal, double input_gain, double fb_
     return output;
 }
 
-void allpass_filter(const arma::vec &signal, double gain, int delay, arma::vec &output) {
+void allpass_filter(const arma::vec &signal, double gain, unsigned int delay, arma::vec &output) {
     iir_filter(signal, -gain, 1., delay, -gain, delay, output);
 }
 
-arma::vec allpass_filter(const arma::vec &signal, double gain, int delay) {
+arma::vec allpass_filter(const arma::vec &signal, double gain, unsigned int delay) {
     arma::vec output(signal.n_elem);
 
     allpass_filter(signal, gain, delay, output);
     return output;
 }
 
-void lowpass_filter(const arma::vec &signal, int sampling_rate, double cutoff_frequency, arma::vec &output) {
+void lowpass_filter(const arma::vec &signal, unsigned int sampling_rate, double cutoff_frequency, arma::vec &output) {
     double alpha = 2.0 * M_PI * cutoff_frequency / (sampling_rate * (2.0 * M_PI * cutoff_frequency / sampling_rate + 1.0));
     iir_filter(signal, alpha, 0.0, 0, -(1 - alpha), 1, output);
 }
 
-arma::vec lowpass_filter(const arma::vec &signal, int sampling_rate, double cutoff_frequency) {
+arma::vec lowpass_filter(const arma::vec &signal, unsigned int sampling_rate, double cutoff_frequency) {
     arma::vec output(signal.n_elem);
 
     allpass_filter(signal, sampling_rate, cutoff_frequency, output);

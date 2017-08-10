@@ -4,7 +4,7 @@ arma::vec window_rectangular(int framelength) {
     return arma::ones(framelength);
 }
 
-arma::vec window_gaussian(int framelength, double sigma) {
+arma::vec window_gaussian(unsigned int framelength, double sigma) {
     if (framelength == 1) {
         return arma::ones(1);
     }
@@ -12,10 +12,9 @@ arma::vec window_gaussian(int framelength, double sigma) {
         arma::vec n = arma::linspace<arma::vec>(0, framelength-1, framelength) - (framelength - 1.0) / 2.0;
         return arma::exp(-n * n / (2 * sigma * sigma));
     }
-    // TODO: add framelength checks
 }
 
-arma::vec window_triangle(int framelength) {
+arma::vec window_triangle(unsigned int framelength) {
     if (framelength == 1) {
         return arma::ones(1);
     }
@@ -35,10 +34,9 @@ arma::vec window_triangle(int framelength) {
         }
         return result;
     }
-    // TODO: add framelength checks
 }
 
-arma::vec window_hann(int framelength) {
+arma::vec window_hann(unsigned int framelength) {
     if (framelength == 1) {
         return arma::ones(1);
     }
@@ -46,10 +44,9 @@ arma::vec window_hann(int framelength) {
         arma::vec n = arma::linspace<arma::vec>(0, framelength-1, framelength);
         return 0.5 - 0.5 * arma::cos(2 * n * M_PI / (framelength - 1));
     }
-    // TODO: add framelength checks
 }
 
-arma::vec window_hamming(int framelength) {
+arma::vec window_hamming(unsigned int framelength) {
     if (framelength == 1) {
         return arma::ones(1);
     }
@@ -57,10 +54,9 @@ arma::vec window_hamming(int framelength) {
         arma::vec n = arma::linspace<arma::vec>(0, framelength-1, framelength);
         return 0.54 - 0.46 * arma::cos(2 * n * M_PI / (framelength - 1));
     }
-    // TODO: add framelength checks
 }
 
-arma::vec window_blackman(int framelength, double alpha) {
+arma::vec window_blackman(unsigned int framelength, double alpha) {
     if (framelength == 1) {
         return arma::ones(1);
     }
@@ -68,5 +64,4 @@ arma::vec window_blackman(int framelength, double alpha) {
         arma::vec n = arma::linspace<arma::vec>(0, framelength-1, framelength);
         return (1.0 - alpha / 2.0) - 0.5 * arma::cos(2 * n * M_PI / (framelength - 1)) + 0.5 * alpha * arma::cos(4 * n * M_PI / (framelength - 1));
     }
-    // TODO: add framelength checks
 }
