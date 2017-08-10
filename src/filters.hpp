@@ -3,7 +3,6 @@
 
 #include <armadillo>
 #include <cmath>
-#include "filters.hpp"
 
 void fir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, arma::vec &output);
 
