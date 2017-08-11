@@ -4,5 +4,6 @@
 #include <armadillo>
 
 arma::vec reverse(arma::vec a);
+arma::vec reverse_copy(const arma::vec &a);
 
 #endif
