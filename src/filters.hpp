@@ -4,25 +4,51 @@
 #include <armadillo>
 #include <cmath>
 
-void fir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, arma::vec &output);
+/*
+====Generic FIR filters===
+*/
+
+void fir_filter(const arma::vec &signal, const arma::vec &reverse_ff_coeffs, arma::vec &output);
+// implements a FIR filter:
+// y[n] = ff_coeffs[0] * x[n] + ff_coeffs[1] * x[n - 1] + ...
+// however, here the ff_coeffs array is reversed, because armadillo does not understand reverse subvec views
+// so y[n] = reverse_ff_coeffs[filter_order] * x[n] + reverse_ff_coeffs[filter_order - 1] * x[n-1] + ...
+// and this can be written via dot products
+// the result is written to the vector output
 
 void fir_filter(const arma::vec &signal, double input_gain, double ff_coeff, unsigned int delay, arma::vec &output);
 // y[n] = input_gain * x[n] + ff_coeff * x[n - delay]
 
 arma::vec fir_filter(const arma::vec &signal, const arma::vec &ff_coeffs);
+// y[n] = ff_coeffs[0] * x[n] + ff_coeffs[1] * x[n - 1] + ....
 
 arma::vec fir_filter(const arma::vec &signal, double input_gain, double ff_coeff, unsigned int delay);
 // y[n] = input_gain * x[n] + ff_coeff * x[n - delay]
 
-void iir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, const arma::vec &fb_coeffs, arma::vec &output);
+/*
+====Generic IIR filters===
+*/
+
+void iir_filter(const arma::vec &signal, const arma::vec &reverse_ff_coeffs, const arma::vec &reverse_fb_coeffs, arma::vec &output);
+// implements an IIR filter:
+// y[n] = ff_coeff[0] * x[n] + ff_coeff[1] * x[n - 1] + ... - fb_coeffs[0] * y[n-1] - fb_coeffs[1] * y[n-2] + ...
+// however, here the ff_coeffs and fb_coeffs arrays are reversed, because armadillo does not understand reverse subvec views
+// so y[n] = reverse_ff_coeffs[ff_filter_order] * x[n] + reverse_ff_coeffs[ff_filter_order - 1] * x[n-1] + ... - reverse_fb_coeffs[fb_filter_order-1] * y[n-1] - ...
+// and this can be written via dot products
+// the result is written to the vector output
 
 void iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, unsigned int ff_delay, double fb_coeff, unsigned int fb_delay, arma::vec &output);
 // y[n] = input_gain * x[n] + ff_coeff * x[n - ff_delay] - fb_coeff * y[n - fb_delay]
 
 arma::vec iir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, const arma::vec &fb_coeffs);
+// y[n] = ff_coeff[0] * x[n] + ff_coeff[1] * x[n - 1] + ... - fb_coeffs[0] * y[n-1] - fb_coeffs[1] * y[n-2] + ...
 
 arma::vec iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, int ff_delay, double fb_coeff, unsigned int fb_delay);
 // y[n] = input_gain * x[n] + ff_coeff * x[n - ff_delay] - fb_coeff * y[n - fb_delay]
+
+/*
+====Zero- and pole- filters===
+*/
 
 void one_zero_filter(const arma::vec &signal, double input_gain, double ff_coeff, arma::vec &output);
 // y[n] = input_gain * x[n] + ff_coeff * x[n-1]
@@ -40,6 +66,10 @@ void two_pole_resonator(const arma::vec &signal, double frequency, double dampin
 
 arma::vec two_pole_resonator(const arma::vec &signal, double frequency, double damping);
 
+/*
+====All-/low-/high-/band-pass filters===
+*/
+
 void allpass_filter(const arma::vec &signal, double gain, unsigned int delay, arma::vec &output);
 
 arma::vec allpass_filter(const arma::vec &signal, double gain, unsigned int delay);
@@ -51,5 +81,9 @@ void lowpass_filter(const arma::vec &signal, unsigned int sampling_rate, double 
 // dt = 1 / sampling_rate
 
 arma::vec lowpass_filter(const arma::vec &signal, unsigned int sampling_rate, double cutoff_frequency);
+
+// comb filter - wrapped call to iir_filter
+// highpass
+// bandpass
 
 #endif
