@@ -63,6 +63,6 @@ arma::vec window_blackman(unsigned int framelength, double alpha) {
     }
     else {
         arma::vec n = arma::linspace<arma::vec>(0, framelength-1, framelength);
-        return (1.0 - alpha / 2.0) - 0.5 * arma::cos(2 * n * M_PI / (framelength - 1)) + 0.5 * alpha * arma::cos(4 * n * M_PI / (framelength - 1));
+        return (1.0 - alpha) / 2.0 - 0.5 * arma::cos(2 * n * M_PI / (framelength - 1)) + 0.5 * alpha * arma::cos(4 * n * M_PI / (framelength - 1));
     }
 }
