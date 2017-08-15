@@ -1,14 +1,15 @@
 #include "filters.hpp"
 #include "helpers.hpp"
+#include <iostream>
 
 void fir_filter(const arma::vec &signal, const arma::vec &reverse_ff_coeffs, arma::vec &output) {
-    unsigned int i;
+    int i;
     for (i=0; i<reverse_ff_coeffs.n_elem; i++) {
-        output[i] = arma::dot(signal.subvec(0, i), reverse_ff_coeffs.subvec(0, i));
+        output[i] = arma::dot(signal.subvec(0, i), reverse_ff_coeffs.subvec(reverse_ff_coeffs.n_elem-1-i, reverse_ff_coeffs.n_elem-1));
     }
 
     for (i=reverse_ff_coeffs.n_elem; i<signal.n_elem; i++) {
-        output[i] = arma::dot(signal.subvec(i - signal.n_elem + 1, i), reverse_ff_coeffs);
+        output[i] = arma::dot(signal.subvec(i + 1 - reverse_ff_coeffs.n_elem, i), reverse_ff_coeffs);
     }
 }
 
@@ -34,7 +35,7 @@ arma::vec fir_filter(const arma::vec &signal, double input_gain, double ff_coeff
 void iir_filter(const arma::vec &signal, const arma::vec &reverse_ff_coeffs, const arma::vec &reverse_fb_coeffs, arma::vec &output) {
     output = fir_filter(signal, reverse_ff_coeffs);
 
-    unsigned int i;
+    int i;
 
     for (i=1; i<=reverse_fb_coeffs.n_elem; i++) {
         output[i] -= arma::dot(output.subvec(0, i-1), reverse_fb_coeffs.subvec(0, i-1));
@@ -48,7 +49,7 @@ void iir_filter(const arma::vec &signal, const arma::vec &reverse_ff_coeffs, con
 void iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, unsigned int ff_delay, double fb_coeff, unsigned int fb_delay, arma::vec &output) {
     fir_filter(signal, input_gain, ff_coeff, ff_delay, output);
 
-    for (unsigned int i=fb_delay; i<signal.n_elem; i++) {
+    for (int i=fb_delay; i<signal.n_elem; i++) {
         output[i] -= fb_coeff * output[i - fb_delay];
     }
 }
