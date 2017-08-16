@@ -1,9 +1,9 @@
 CXX = g++
 RM=rm -f
 
-# DEBUG_LEVEL     = -g
-EXTRA_CCFLAGS   = -Wall -Wextra
-CXXFLAGS        = -std=c++11 $(DEBUG_LEVEL) $(EXTRA_CCFLAGS) 
+EXTRA_CCFLAGS   = -Wall -Wextra -Wcast-qual -Wfloat-equal -Wpedantic -Wpointer-arith -Wshadow
+CXXFLAGS        = -std=c++11 $(EXTRA_CCFLAGS)
+CXXOPTFLAGS		= -std=c++11 $(EXTRA_CCFLAGS) -O2
 
 LDLIBS=-larmadillo
 MAKELIBFLAGS=-dynamiclib
