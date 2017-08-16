@@ -24,6 +24,7 @@ all: $(TARGET)
 
 $(TARGET): $(OBJECT_FILES)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECT_FILES) $(LDLIBS)
+	./test
 
 depend: .depend
 
