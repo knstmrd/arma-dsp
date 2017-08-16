@@ -33,16 +33,15 @@ arma::vec fir_filter(const arma::vec &signal, double input_gain, double ff_coeff
 }
 
 void iir_filter(const arma::vec &signal, const arma::vec &reverse_ff_coeffs, const arma::vec &reverse_fb_coeffs, arma::vec &output) {
-    output = fir_filter(signal, reverse_ff_coeffs);
-
+    fir_filter(signal, reverse_ff_coeffs, output);
     int i;
 
-    for (i=1; i<=reverse_fb_coeffs.n_elem; i++) {
-        output[i] -= arma::dot(output.subvec(0, i-1), reverse_fb_coeffs.subvec(0, i-1));
+    for (i=1; i<reverse_fb_coeffs.n_elem; i++) {
+        output[i] -= arma::dot(output.subvec(0, i-1), reverse_fb_coeffs.subvec(reverse_fb_coeffs.n_elem - i, reverse_fb_coeffs.n_elem-1));
     }
 
-    for (i=reverse_fb_coeffs.n_elem+1; i<=signal.n_elem; i++) {
-        output[i] -= arma::dot(signal.subvec(i - signal.n_elem + 1, i-1), reverse_fb_coeffs);
+    for (i=reverse_fb_coeffs.n_elem; i<signal.n_elem; i++) {
+        output[i] -= arma::dot(output.subvec(i - reverse_fb_coeffs.n_elem, i-1), reverse_fb_coeffs);
     }
 }
 
