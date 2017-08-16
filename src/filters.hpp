@@ -43,7 +43,7 @@ void iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, uns
 arma::vec iir_filter(const arma::vec &signal, const arma::vec &ff_coeffs, const arma::vec &fb_coeffs);
 // y[n] = ff_coeff[0] * x[n] + ff_coeff[1] * x[n - 1] + ... - fb_coeffs[0] * y[n-1] - fb_coeffs[1] * y[n-2] + ...
 
-arma::vec iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, int ff_delay, double fb_coeff, unsigned int fb_delay);
+arma::vec iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, unsigned int ff_delay, double fb_coeff, unsigned int fb_delay);
 // y[n] = input_gain * x[n] + ff_coeff * x[n - ff_delay] - fb_coeff * y[n - fb_delay]
 
 /*
