@@ -4,13 +4,28 @@
 #include "../src/arma-dsp.hpp"
 
 
+TEST_CASE( "Zero padding function working correctly", "[helper]") {
+    arma::vec a = arma::ones(1);
+
+    arma::vec b = pad_zeros(a, 1);
+    arma::vec c = pad_zeros(a, 1, false);
+
+    REQUIRE( b.n_elem == 2 );
+    REQUIRE( c.n_elem == 2 );
+    REQUIRE( fabs(b[0] - 1.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(b[1] - 0.0) < MAX_ABSOLUTE_ERROR );
+
+    REQUIRE( fabs(c[0] - 0.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(c[1] - 1.0) < MAX_ABSOLUTE_ERROR );
+}
+
 TEST_CASE( "Rectangular window function work correctly", "[window]" ) {
     arma::vec a = window_rectangular(3);
 
     REQUIRE( a.n_elem == 3 );
-    REQUIRE( a[0] == 1.0 );
-    REQUIRE( a[1] == 1.0 );
-    REQUIRE( a[2] == 1.0 );
+    REQUIRE( fabs(a[0] - 1.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(a[1] - 1.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(a[2] - 1.0) < MAX_ABSOLUTE_ERROR );
 }
 
 TEST_CASE( "Triangular window function work correctly", "[window]" ) {
@@ -128,6 +143,11 @@ TEST_CASE( "FIR filter working", "[filter][fir]" ) {
     REQUIRE( fabs(output_3[3] - 0.25) < MAX_ABSOLUTE_ERROR );
 
 }
+
+// fir_filter(const arma::vec &signal, double input_gain, double ff_coeff, unsigned int delay)
+
+
+// iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, int ff_delay, double fb_coeff, unsigned int fb_delay)
 
 TEST_CASE( "IIR filter working", "[filter][iir]" ) {
     arma::vec signal = {2., 1., 0., 0.};
