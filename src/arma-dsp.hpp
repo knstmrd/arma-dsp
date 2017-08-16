@@ -3,5 +3,6 @@
 
 #include "windows.hpp"
 #include "filters.hpp"
+#include "helpers.hpp"
 
 #endif
