@@ -19,7 +19,7 @@ TEST_CASE( "Zero padding function working correctly", "[helper]") {
     REQUIRE( fabs(c[1] - 1.0) < MAX_ABSOLUTE_ERROR );
 }
 
-TEST_CASE( "Rectangular window function work correctly", "[window]" ) {
+TEST_CASE( "Rectangular window function working correctly", "[window]" ) {
     arma::vec a = window_rectangular(3);
 
     REQUIRE( a.n_elem == 3 );
@@ -28,7 +28,7 @@ TEST_CASE( "Rectangular window function work correctly", "[window]" ) {
     REQUIRE( fabs(a[2] - 1.0) < MAX_ABSOLUTE_ERROR );
 }
 
-TEST_CASE( "Triangular window function work correctly", "[window]" ) {
+TEST_CASE( "Triangular window function working correctly", "[window]" ) {
     arma::vec a = window_triangle(3);
     arma::vec b = window_triangle(4);
 
@@ -45,7 +45,7 @@ TEST_CASE( "Triangular window function work correctly", "[window]" ) {
     REQUIRE( fabs(b[3] - 0.25) < MAX_ABSOLUTE_ERROR );
 }
 
-TEST_CASE( "Gaussian window function work correctly", "[window]" ) {
+TEST_CASE( "Gaussian window function working correctly", "[window]" ) {
     arma::vec a = window_gaussian(3, 0.5);
     arma::vec b = window_gaussian(4, 0.5);
     arma::vec c = window_gaussian(3, 0.7);
@@ -67,7 +67,7 @@ TEST_CASE( "Gaussian window function work correctly", "[window]" ) {
     REQUIRE( fabs(c[2] - 0.36044779) < MAX_ABSOLUTE_ERROR );
 }
 
-TEST_CASE( "Hann window function work correctly", "[window]" ) {
+TEST_CASE( "Hann window function working correctly", "[window]" ) {
     arma::vec a = window_hann(3);
     arma::vec b = window_hann(4);
 
@@ -84,7 +84,7 @@ TEST_CASE( "Hann window function work correctly", "[window]" ) {
     REQUIRE( fabs(b[3] - 0.0) < MAX_ABSOLUTE_ERROR );
 }
 
-TEST_CASE( "Hamming window function work correctly", "[window]" ) {
+TEST_CASE( "Hamming window function working correctly", "[window]" ) {
     arma::vec a = window_hamming(3);
     arma::vec b = window_hamming(4);
 
@@ -101,7 +101,7 @@ TEST_CASE( "Hamming window function work correctly", "[window]" ) {
     REQUIRE( fabs(b[3] - 0.08) < MAX_ABSOLUTE_ERROR );
 }
 
-TEST_CASE( "Blackman window function work correctly", "[window]" ) {
+TEST_CASE( "Blackman window function working correctly", "[window]" ) {
     arma::vec a = window_blackman(3);
     arma::vec b = window_blackman(4);
 
@@ -141,13 +141,26 @@ TEST_CASE( "FIR filter working", "[filter][fir]" ) {
     REQUIRE( fabs(output_3[1] - 2.0) < MAX_ABSOLUTE_ERROR );
     REQUIRE( fabs(output_3[2] - 1.0) < MAX_ABSOLUTE_ERROR );
     REQUIRE( fabs(output_3[3] - 0.25) < MAX_ABSOLUTE_ERROR );
-
 }
 
-// fir_filter(const arma::vec &signal, double input_gain, double ff_coeff, unsigned int delay)
+TEST_CASE( "Single-delay FIR filter working", "[filter][fir]" ) {
+    arma::vec signal = {2., 1., 0., 0.};
+    double input_gain = 2.;
+    double ff_coeff = 1.;
+    unsigned int delay = 2;
 
+    arma::vec output_1 = fir_filter(signal, input_gain, 0., 1);
+    REQUIRE( fabs(output_1[0] - 4.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_1[1] - 2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_1[2] - 0.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_1[3] - 0.0) < MAX_ABSOLUTE_ERROR );
 
-// iir_filter(const arma::vec &signal, double input_gain, double ff_coeff, int ff_delay, double fb_coeff, unsigned int fb_delay)
+    arma::vec output_2 = fir_filter(signal, input_gain, ff_coeff, delay);
+    REQUIRE( fabs(output_2[0] - 4.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_2[1] - 2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_2[2] - 2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_2[3] - 1.0) < MAX_ABSOLUTE_ERROR );
+}
 
 TEST_CASE( "IIR filter working", "[filter][iir]" ) {
     arma::vec signal = {2., 1., 0., 0.};
@@ -177,5 +190,26 @@ TEST_CASE( "IIR filter working", "[filter][iir]" ) {
     REQUIRE( fabs(output_3[1] - 1.0) < MAX_ABSOLUTE_ERROR );
     REQUIRE( fabs(output_3[2] - 2.0) < MAX_ABSOLUTE_ERROR );
     REQUIRE( fabs(output_3[3] - 5.0) < MAX_ABSOLUTE_ERROR );
+}
+
+TEST_CASE( "Single-delay IIR filter working", "[filter][iir]" ) {
+    arma::vec signal = {2., 1., 0., 0.};
+    double input_gain = 2.;
+    double ff_coeff = 1.;
+    unsigned int ff_delay = 2;
+    double fb_coeff = 1.;
+    unsigned int fb_delay = 2;
+
+    arma::vec output_1 = iir_filter(signal, input_gain, ff_coeff, ff_delay, 0., 1);
+    REQUIRE( fabs(output_1[0] - 4.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_1[1] - 2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_1[2] - 2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_1[3] - 1.0) < MAX_ABSOLUTE_ERROR );
+
+    arma::vec output_2 = iir_filter(signal, input_gain, ff_coeff, ff_delay, fb_coeff, fb_delay);
+    REQUIRE( fabs(output_2[0] - 4.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_2[1] - 2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_2[2] - -2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_2[3] - -1.0) < MAX_ABSOLUTE_ERROR );
 
 }
