@@ -128,3 +128,34 @@ TEST_CASE( "FIR filter working", "[filter][fir]" ) {
     REQUIRE( fabs(output_3[3] - 0.25) < MAX_ABSOLUTE_ERROR );
 
 }
+
+TEST_CASE( "IIR filter working", "[filter][iir]" ) {
+    arma::vec signal = {2., 1., 0., 0.};
+    arma::vec ff_coeffs_1 = {1.};
+    arma::vec fb_coeffs_1 = {1}; 
+
+    arma::vec ff_coeffs_2 = {1., -1}; 
+    arma::vec fb_coeffs_2 = {-1, 1}; 
+
+    arma::vec ff_coeffs_3 = {1., -1, 2.}; 
+    arma::vec fb_coeffs_3 = {-1, 1, -1.}; 
+
+    arma::vec output_1 = iir_filter(signal, ff_coeffs_1, fb_coeffs_1);
+    REQUIRE( fabs(output_1[0] - 2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_1[1] - -1.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_1[2] - 1.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_1[3] - -1.0) < MAX_ABSOLUTE_ERROR );
+
+    arma::vec output_2 = iir_filter(signal, ff_coeffs_2, fb_coeffs_2);
+    REQUIRE( fabs(output_2[0] - 2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_2[1] - 1.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_2[2] - -2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_2[3] - -3.0) < MAX_ABSOLUTE_ERROR );
+
+    arma::vec output_3 = iir_filter(signal, ff_coeffs_3, fb_coeffs_3);
+    REQUIRE( fabs(output_3[0] - 2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_3[1] - 1.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_3[2] - 2.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(output_3[3] - 5.0) < MAX_ABSOLUTE_ERROR );
+
+}
