@@ -9,7 +9,7 @@ LDLIBS=-larmadillo
 MAKELIBFLAGS=-dynamiclib
 
 TARGET = test
-SOURCE_FILES=src/filters.cpp src/windows.cpp src/helpers.cpp tests/tests.cpp
+SOURCE_FILES=src/stft.cpp src/filters.cpp src/windows.cpp src/helpers.cpp tests/tests.cpp
 OBJECT_FILES=$(subst .cpp,.o,$(SOURCE_FILES))
 # SOURCE_FILES += tests/tests.cpp
 # OBJECT_FILES += tests/tests.o
