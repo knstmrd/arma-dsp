@@ -26,6 +26,16 @@ arma::vec window_triangle(unsigned int framelength) {
     }
 }
 
+arma::vec window_welch(unsigned int framelength) {
+    if (framelength == 1) {
+        return arma::ones(1);
+    }
+    else {
+        arma::vec n = arma::linspace<arma::vec>(0, framelength-1, framelength) - (framelength - 1.0) / 2.0;
+        return 1 - (n / ((framelength - 1.0) / 2.0)) % (n / ((framelength - 1.0) / 2.0));
+    }
+}
+
 arma::vec window_gaussian(unsigned int framelength, double sigma) {
     if (framelength == 1) {
         return arma::ones(1);
