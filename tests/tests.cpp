@@ -228,5 +228,19 @@ TEST_CASE( "Single-delay IIR filter working", "[filter][iir]" ) {
     REQUIRE( fabs(output_2[1] - 2.0) < MAX_ABSOLUTE_ERROR );
     REQUIRE( fabs(output_2[2] - -2.0) < MAX_ABSOLUTE_ERROR );
     REQUIRE( fabs(output_2[3] - -1.0) < MAX_ABSOLUTE_ERROR );
+}
 
+
+TEST_CASE( "STFT working correctly", "[stft]" ) {
+    int nsamples = 64;
+    arma::vec signal = arma::linspace<arma::vec>(0, nsamples-1, nsamples);
+    signal = arma::sin(0.1 * signal);
+
+    arma::cx_mat stft_out = stft(signal, window_triangle(nsamples), nsamples, 2);
+
+    REQUIRE( stft_out.n_cols == 33 ); // [time x frequency, columns are freq bins, rows are different time windows]
+    REQUIRE( stft_out.n_rows == 3 );
+    REQUIRE( fabs(std::abs(stft_out.at(1, 0)) - 1.04957202E-01) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(std::abs(stft_out.at(1, 1)) - 1.59940953E+01) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(std::abs(stft_out.at(1, 2)) - 6.01590566) < MAX_ABSOLUTE_ERROR );
 }
