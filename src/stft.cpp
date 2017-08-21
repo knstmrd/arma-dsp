@@ -45,7 +45,7 @@ arma::cx_mat stft(const arma::vec &signal, const arma::vec &window_array, int fr
     return output;
 }
 
-arma::cx_mat stft(arma::vec signal, std::function<arma::vec(int)> window, int framelength, int overlap, bool centered, bool half) {
+arma::cx_mat stft(const arma::vec &signal, std::function<arma::vec(unsigned int)> window, int framelength, int overlap, bool centered, bool half) {
     arma::vec window_array = window(framelength);
     return stft(signal, window_array, framelength, overlap, centered, half);
 }
