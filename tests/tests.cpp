@@ -45,6 +45,23 @@ TEST_CASE( "Triangular window function working correctly", "[window]" ) {
     REQUIRE( fabs(b[3] - 0.25) < MAX_ABSOLUTE_ERROR );
 }
 
+TEST_CASE( "Welch window function working correctly", "[window]" ) {
+    arma::vec a = window_welch(3);
+    arma::vec b = window_welch(4);
+
+    REQUIRE( a.n_elem == 3 );
+    REQUIRE( b.n_elem == 4 );
+
+    REQUIRE( fabs(a[0] - 0.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(a[1] - 1.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(a[2] - 0.0) < MAX_ABSOLUTE_ERROR );
+
+    REQUIRE( fabs(b[0] - 0.0) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(b[1] - 0.88888889) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(b[2] - 0.88888889) < MAX_ABSOLUTE_ERROR );
+    REQUIRE( fabs(b[3] - 0.0) < MAX_ABSOLUTE_ERROR );
+}
+
 TEST_CASE( "Gaussian window function working correctly", "[window]" ) {
     arma::vec a = window_gaussian(3, 0.5);
     arma::vec b = window_gaussian(4, 0.5);
