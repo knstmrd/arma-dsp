@@ -232,7 +232,7 @@ TEST_CASE( "Single-delay IIR filter working", "[filter][iir]" ) {
 
 
 TEST_CASE( "STFT working correctly", "[stft]" ) {
-    int nsamples = 64;
+    unsigned int nsamples = 64;
     arma::vec signal = arma::linspace<arma::vec>(0, nsamples-1, nsamples);
     signal = arma::sin(0.1 * signal);
 
@@ -247,7 +247,7 @@ TEST_CASE( "STFT working correctly", "[stft]" ) {
 
 
 TEST_CASE( "STFT with window function working correctly", "[stft]" ) {
-    int nsamples = 64;
+    unsigned int nsamples = 64;
     arma::vec signal = arma::linspace<arma::vec>(0, nsamples-1, nsamples);
     signal = arma::sin(0.1 * signal);
     arma::cx_mat stft_out = stft(signal, window_triangle, nsamples, 2);
