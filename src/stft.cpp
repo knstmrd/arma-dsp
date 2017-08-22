@@ -62,7 +62,7 @@ arma::vec istft(const arma::cx_mat &spectrogram, const arma::vec &window_array, 
     arma::mat ifft_out;
     unsigned int i, j=0, conj_pos;
     
-    for (i=0; i<output.n_elem-framelength; i+=offset) {
+    for (i=0; i<=output.n_elem-framelength; i+=offset) {
         slice.subvec(0, spectrogram.n_cols - 1) = spectrogram.row(j);
         if (half) {
             slice.subvec(spectrogram.n_cols, spectrogram.n_cols * 2 - 3) = reverse_copy(spectrogram.row(j)).subvec(1, spectrogram.n_cols - 2);
