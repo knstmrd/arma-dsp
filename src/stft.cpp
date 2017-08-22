@@ -79,3 +79,12 @@ arma::vec istft(const arma::cx_mat &spectrogram, const arma::vec &window_array, 
 
     return arma::conv_to<arma::vec>::from(output);
 }
+
+arma::vec istft(const arma::cx_mat &spectrogram, std::function<arma::vec(unsigned int)> window, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
+    arma::vec window_array = window(framelength);
+    return istft(spectrogram, window_array, framelength, overlap, centered, half);
+}
+
+arma::vec istft(const arma::cx_mat &spectrogram, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
+    return istft(spectrogram, window_welch(framelength), framelength, overlap, centered, half);
+}
