@@ -6,7 +6,6 @@
 arma::cx_mat stft(const arma::vec &signal, const arma::vec &window_array, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
     arma::vec data;
 
-    
     if (centered) {
         data = pad_zeros(signal, framelength / 2, true);
         data = pad_zeros(data, framelength / 2, false);
@@ -14,6 +13,7 @@ arma::cx_mat stft(const arma::vec &signal, const arma::vec &window_array, unsign
     else {
         data = signal;
     }
+
     int offset = framelength / overlap;
     data = pad_zeros(data, ceil(data.n_elem / framelength) * framelength - data.n_elem, true);
     arma::cx_vec fft_out = arma::fft(data.subvec(0, framelength-1) % window_array) / (framelength / offset / 2);
@@ -52,4 +52,30 @@ arma::cx_mat stft(const arma::vec &signal, std::function<arma::vec(unsigned int)
 
 arma::cx_mat stft(const arma::vec &signal, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
     return stft(signal, window_welch(framelength), framelength, overlap, centered, half);
+}
+
+arma::vec istft(const arma::cx_mat &spectrogram, const arma::vec &window_array, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
+    int offset = framelength / overlap;
+    arma::rowvec rwa = arma::conv_to<arma::rowvec>::from(window_array);
+    arma::rowvec output = arma::zeros<arma::rowvec>(framelength + (spectrogram.n_rows - 1) * offset);
+    arma::cx_rowvec slice = arma::zeros<arma::cx_rowvec>(spectrogram.n_cols * 2 - 2);
+    arma::mat ifft_out;
+    unsigned int i, j=0, conj_pos;
+    
+    for (i=0; i<output.n_elem-framelength; i+=offset) {
+        slice.subvec(0, spectrogram.n_cols - 1) = spectrogram.row(j);
+        if (half) {
+            slice.subvec(spectrogram.n_cols, spectrogram.n_cols * 2 - 3) = reverse_copy(spectrogram.row(j)).subvec(1, spectrogram.n_cols - 2);
+            conj_pos = slice.n_elem / 2 + 1;
+            slice.subvec(conj_pos, slice.n_elem-1) = arma::conj(slice.subvec(conj_pos, slice.n_elem-1));
+        }
+        ifft_out = arma::real(ifft(slice));
+        output.subvec(i, i+framelength-1) += ifft_out % rwa;
+        j++;
+    }
+    if (centered) {
+        output = output.subvec(framelength / 2, output.n_elem - framelength / 2 - 1);
+    }
+
+    return arma::conv_to<arma::vec>::from(output);
 }
