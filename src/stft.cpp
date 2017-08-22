@@ -3,7 +3,7 @@
 #include "windows.hpp"
 #include "helpers.hpp"
 
-arma::cx_mat stft(const arma::vec &signal, const arma::vec &window_array, int framelength, int overlap, bool centered, bool half) {
+arma::cx_mat stft(const arma::vec &signal, const arma::vec &window_array, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
     arma::vec data;
 
     
@@ -45,11 +45,11 @@ arma::cx_mat stft(const arma::vec &signal, const arma::vec &window_array, int fr
     return output;
 }
 
-arma::cx_mat stft(const arma::vec &signal, std::function<arma::vec(unsigned int)> window, int framelength, int overlap, bool centered, bool half) {
+arma::cx_mat stft(const arma::vec &signal, std::function<arma::vec(unsigned int)> window, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
     arma::vec window_array = window(framelength);
     return stft(signal, window_array, framelength, overlap, centered, half);
 }
 
-arma::cx_mat stft(const arma::vec &signal, int framelength, int overlap, bool centered, bool half) {
+arma::cx_mat stft(const arma::vec &signal, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
     return stft(signal, window_welch(framelength), framelength, overlap, centered, half);
 }
