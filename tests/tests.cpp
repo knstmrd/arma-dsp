@@ -263,13 +263,10 @@ TEST_CASE( "STFT with window function working correctly", "[stft]" ) {
 TEST_CASE( "ISTFT working correctly", "[istft]" ) {
     unsigned int nsamples = 64;
     arma::vec signal = arma::linspace<arma::vec>(0, nsamples-1, nsamples);
-    signal = arma::sin(signal / 21);
-    arma::cx_mat stft_out = stft(signal, window_triangle(nsamples), nsamples, 2);
-    arma::vec restored_signal = istft(stft_out, window_triangle(nsamples), nsamples, 2);
+    signal = arma::sin(signal / 100);
+    arma::cx_mat stft_out = stft(signal, window_triangle(8), 8, 4);
+    arma::vec restored_signal = istft(stft_out, window_triangle(8), 8, 4);
+
     REQUIRE( restored_signal.n_elem == 64 );
-    REQUIRE( fabs(restored_signal[0] - signal[0])< MAX_ABSOLUTE_ERROR );
-    REQUIRE( fabs(restored_signal[1] - signal[1])< MAX_ABSOLUTE_ERROR );
-    REQUIRE( fabs(restored_signal[2] - signal[2])< MAX_ABSOLUTE_ERROR );
-    REQUIRE( fabs(restored_signal[3] - signal[3])< MAX_ABSOLUTE_ERROR );
-    REQUIRE( fabs(restored_signal[4] - signal[4])< MAX_ABSOLUTE_ERROR );
+    REQUIRE( sqrt(arma::mean((restored_signal - signal) % (restored_signal - signal))) < 0.2 );
 }
