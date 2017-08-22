@@ -12,6 +12,18 @@ arma::vec reverse_copy(const arma::vec &a) {
     return b;
 }
 
+arma::rowvec reverse_copy(const arma::rowvec &a) {
+    arma::rowvec b = a;
+    std::reverse(b.begin(), b.end());
+    return b;
+}
+
+arma::cx_rowvec reverse_copy(const arma::cx_rowvec &a) {
+    arma::cx_rowvec b = a;
+    std::reverse(b.begin(), b.end());
+    return b;
+}
+
 arma::vec pad_zeros(const arma::vec &a, unsigned int n_zeros, bool end) {
     arma::vec b = arma::zeros(a.n_elem + n_zeros);
     if (end) {
