@@ -90,6 +90,21 @@ arma::vec one_pole_filter(const arma::vec &signal, double input_gain, double fb_
     return output;
 }
 
+void two_pole_resonator(const arma::vec &signal, unsigned int sampling_rate, double frequency, double bandwidth, arma::vec &output) {
+    arma::vec reverse_ff_coeffs = {1.};
+    double R = exp(-M_PI * bandwidth / sampling_rate);
+    arma::vec reverse_fb_coeffs = {R*R, -2 * R * cos(2 * M_PI * frequency / sampling_rate)};
+
+    iir_filter(signal, reverse_ff_coeffs, reverse_fb_coeffs, output);
+}
+
+arma::vec two_pole_resonator(const arma::vec &signal, unsigned int sampling_rate, double frequency, double bandwidth) {
+    arma::vec output(signal.n_elem);
+
+    two_pole_resonator(signal, sampling_rate, frequency, bandwidth, output);
+    return output;
+}
+
 void allpass_filter(const arma::vec &signal, double gain, unsigned int delay, arma::vec &output) {
     iir_filter(signal, -gain, 1., delay, -gain, delay, output);
 }

@@ -62,9 +62,12 @@ void one_pole_filter(const arma::vec &signal, double input_gain, double fb_coeff
 arma::vec one_pole_filter(const arma::vec &signal, double input_gain, double fb_coeff);
 // y[n] = ff_coeff * x[n] - fb_coeff * y[n-1]
 
-void two_pole_resonator(const arma::vec &signal, double frequency, double damping, arma::vec &output);
+void two_pole_resonator(const arma::vec &signal, unsigned int sampling_rate, double frequency, double bandwidth, arma::vec &output);
 
-arma::vec two_pole_resonator(const arma::vec &signal, double frequency, double damping);
+arma::vec two_pole_resonator(const arma::vec &signal, unsigned int sampling_rate, double frequency, double bandwidth);
+// R = exp(-pi * bandwidth / sampling_rate)
+// a1 = -2 * R * cos(2 * pi * frequency / sampling_rate)
+// a2 = R^2
 
 /*
 ====All-/low-/high-/band-pass filters===
