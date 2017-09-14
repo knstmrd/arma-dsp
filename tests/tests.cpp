@@ -2,7 +2,7 @@
 #include "catch.hpp"
 #include "max_error.hpp"
 #include "../src/arma-dsp.hpp"
-
+using namespace adsp;
 
 TEST_CASE( "Zero padding function working correctly", "[helper]") {
     arma::vec a = arma::ones(1);
