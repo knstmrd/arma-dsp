@@ -1,10 +1,11 @@
 #include "windows.hpp"
 #include "helpers.hpp"
 
-arma::vec window_rectangular(unsigned int framelength) {
+arma::vec adsp::window_rectangular(unsigned int framelength) {
     return arma::ones(framelength);
 }
-arma::vec window_triangle(unsigned int framelength) {
+
+arma::vec adsp::window_triangle(unsigned int framelength) {
     if (framelength == 1) {
         return arma::ones(1);
     }
@@ -26,7 +27,7 @@ arma::vec window_triangle(unsigned int framelength) {
     }
 }
 
-arma::vec window_welch(unsigned int framelength) {
+arma::vec adsp::window_welch(unsigned int framelength) {
     if (framelength == 1) {
         return arma::ones(1);
     }
@@ -36,7 +37,7 @@ arma::vec window_welch(unsigned int framelength) {
     }
 }
 
-arma::vec window_gaussian(unsigned int framelength, double sigma) {
+arma::vec adsp::window_gaussian(unsigned int framelength, double sigma) {
     if (framelength == 1) {
         return arma::ones(1);
     }
@@ -47,7 +48,7 @@ arma::vec window_gaussian(unsigned int framelength, double sigma) {
 }
 
 
-arma::vec window_hann(unsigned int framelength) {
+arma::vec adsp::window_hann(unsigned int framelength) {
     if (framelength == 1) {
         return arma::ones(1);
     }
@@ -57,7 +58,7 @@ arma::vec window_hann(unsigned int framelength) {
     }
 }
 
-arma::vec window_hamming(unsigned int framelength) {
+arma::vec adsp::window_hamming(unsigned int framelength) {
     if (framelength == 1) {
         return arma::ones(1);
     }
@@ -67,7 +68,7 @@ arma::vec window_hamming(unsigned int framelength) {
     }
 }
 
-arma::vec window_blackman(unsigned int framelength, double alpha) {
+arma::vec adsp::window_blackman(unsigned int framelength, double alpha) {
     if (framelength == 1) {
         return arma::ones(1);
     }

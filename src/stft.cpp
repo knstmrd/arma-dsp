@@ -3,7 +3,7 @@
 #include "windows.hpp"
 #include "helpers.hpp"
 
-arma::cx_mat stft(const arma::vec &signal, const arma::vec &window_array, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
+arma::cx_mat adsp::stft(const arma::vec &signal, const arma::vec &window_array, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
     arma::vec data;
 
     if (centered) {
@@ -45,16 +45,16 @@ arma::cx_mat stft(const arma::vec &signal, const arma::vec &window_array, unsign
     return output;
 }
 
-arma::cx_mat stft(const arma::vec &signal, std::function<arma::vec(unsigned int)> window, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
+arma::cx_mat adsp::stft(const arma::vec &signal, std::function<arma::vec(unsigned int)> window, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
     arma::vec window_array = window(framelength);
     return stft(signal, window_array, framelength, overlap, centered, half);
 }
 
-arma::cx_mat stft(const arma::vec &signal, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
+arma::cx_mat adsp::stft(const arma::vec &signal, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
     return stft(signal, window_welch(framelength), framelength, overlap, centered, half);
 }
 
-arma::vec istft(const arma::cx_mat &spectrogram, const arma::vec &window_array, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
+arma::vec adsp::istft(const arma::cx_mat &spectrogram, const arma::vec &window_array, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
     int offset = framelength / overlap;
     arma::rowvec rwa = arma::conv_to<arma::rowvec>::from(window_array);
     arma::rowvec output = arma::zeros<arma::rowvec>(framelength + (spectrogram.n_rows - 1) * offset);
@@ -80,11 +80,11 @@ arma::vec istft(const arma::cx_mat &spectrogram, const arma::vec &window_array, 
     return arma::conv_to<arma::vec>::from(output);
 }
 
-arma::vec istft(const arma::cx_mat &spectrogram, std::function<arma::vec(unsigned int)> window, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
+arma::vec adsp::istft(const arma::cx_mat &spectrogram, std::function<arma::vec(unsigned int)> window, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
     arma::vec window_array = window(framelength);
     return istft(spectrogram, window_array, framelength, overlap, centered, half);
 }
 
-arma::vec istft(const arma::cx_mat &spectrogram, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
+arma::vec adsp::istft(const arma::cx_mat &spectrogram, unsigned int framelength, unsigned int overlap, bool centered, bool half) {
     return istft(spectrogram, window_welch(framelength), framelength, overlap, centered, half);
 }
