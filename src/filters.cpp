@@ -118,12 +118,12 @@ arma::vec adsp::allpass_filter(const arma::vec &signal, double gain, unsigned in
 
 void adsp::lowpass_filter(const arma::vec &signal, unsigned int sampling_rate, double cutoff_frequency, arma::vec &output) {
     double alpha = 2.0 * M_PI * cutoff_frequency / (sampling_rate * (2.0 * M_PI * cutoff_frequency / sampling_rate + 1.0));
-    iir_filter(signal, alpha, 0.0, 0, -(1 - alpha), 1, output);
+    iir_filter(signal, alpha, 0.0, 1, -(1 - alpha), 1, output);
 }
 
 arma::vec adsp::lowpass_filter(const arma::vec &signal, unsigned int sampling_rate, double cutoff_frequency) {
     arma::vec output(signal.n_elem);
 
-    allpass_filter(signal, sampling_rate, cutoff_frequency, output);
+    lowpass_filter(signal, sampling_rate, cutoff_frequency, output);
     return output;
 }
